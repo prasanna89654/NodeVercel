@@ -10,6 +10,10 @@ app.get("/ping", (req, res) => {
   res.send("pong 🏓");
 });
 
+app.get("/name", (req, res) => {
+  res.send("My name is Prasanna Poudel");
+});
+
 const port = process.env.PORT || 8080;
 
 app.listen(port, (err, res) => {
