@@ -18,11 +18,11 @@ model User {
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  status    Genre  @default(Horror)
+  status    Genre    @default(Horror)
+  address   String?
 }
 
- 
-enum Genre{
+enum Genre {
   Action
   Adventure
   Comedy
@@ -32,5 +32,11 @@ enum Genre{
   Mystery
 }
 
-//create new Genretable using enums
-
+//model of book
+model Book {
+  id        Int      @id @default(autoincrement())
+  title     String
+  author    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
