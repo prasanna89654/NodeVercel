@@ -10,6 +10,7 @@ CREATE TABLE "User" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "status" "Genre" NOT NULL DEFAULT 'Horror',
+    "address" TEXT,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );

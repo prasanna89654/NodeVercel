@@ -21,11 +21,6 @@ app.get("/getalluser", async (req, res) => {
   res.json(allUsers);
 });
 
-app.get("/getallbook", async (req, res) => {
-  const allUsers = await prisma.Book.findMany();
-  res.json(allUsers);
-});
-
 const port = process.env.PORT || 8080;
 app.listen(port, (err, res) => {
   if (err) {
