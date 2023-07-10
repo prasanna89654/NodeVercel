@@ -17,8 +17,15 @@ app.get("/name", (req, res) => {
 });
 
 //get user data
-app.get("/user", (req, res) => {
-  const user = prisma.user.findMany();
+app.get("/user", async (req, res) => {
+  const user = await prisma.user.findMany();
+  res.send(user);
+});
+
+//get all genre
+app.get("/getallgenre", async (req, res) => {
+  const genre = await prisma.genre;
+  res.send(genre);
 });
 
 const port = process.env.PORT || 8080;
