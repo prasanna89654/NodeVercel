@@ -32,3 +32,5 @@ enum Genre{
   Mystery
 }
 
+//create new Genretable using enums
+
