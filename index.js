@@ -26,6 +26,7 @@ app.get("/getallpost", async (req, res) => {
   const allUsers = await prisma.post.findMany();
   res.json(allUsers);
 });
+//
 
 const port = process.env.PORT || 8080;
 app.listen(port, (err, res) => {
