@@ -31,3 +31,10 @@ enum Genre {
   Horror
   Mystery
 }
+
+model Post {
+  id          Int    @id @default(autoincrement())
+  title       String
+  content     String
+  description String
+}
