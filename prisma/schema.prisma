@@ -37,4 +37,5 @@ model Post {
   title       String
   content     String
   description String
+  address     String
 }
