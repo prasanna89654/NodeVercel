@@ -1,7 +1,15 @@
 import { PrismaClient } from "@prisma/client";
+import multer from "multer";
 import express from "express";
+import cors from "cors";
 const app = express();
+app.use(cors());
 const prisma = new PrismaClient();
+app.use(express.json());
+const storage = multer.memoryStorage();
+const upload = multer({
+  storage: storage,
+});
 
 app.get("/", (req, res) => {
   res.send("Express JS on Vercel");
@@ -16,17 +24,44 @@ app.get("/name", (req, res) => {
 });
 
 //get user data
-app.get("/getalluser", async (req, res) => {
+app.get("/getAllUser", async (req, res) => {
   const allUsers = await prisma.user.findMany();
   res.json(allUsers);
 });
 
-//g
-app.get("/getallpost", async (req, res) => {
-  const allUsers = await prisma.post.findMany();
-  res.json(allUsers);
+app.get("/getAllBooks", async (req, res) => {
+  const allBooks = await prisma.book.findMany();
+  res.json(allBooks);
 });
-//
+
+app.post("/createBook", upload.single("file"), async (req, res) => {
+  let filesv = null;
+  if (req.file !== undefined) {
+    const fileBuffer = req.file.buffer;
+    filesv = fileBuffer.toString("base64");
+  }
+  // console.log("entered");
+  const { title, price, description, author, genre } = req.body;
+
+  try {
+    const book = await prisma.book.create({
+      data: {
+        title: title,
+        price: price,
+        description: description,
+        image: filesv ?? null,
+        author: author,
+        genre: genre,
+      },
+    });
+    res.json(book);
+  } catch (err) {
+    res.json({
+      sucess: false,
+      message: err.message,
+    });
+  }
+});
 
 const port = process.env.PORT || 8080;
 app.listen(port, (err, res) => {
