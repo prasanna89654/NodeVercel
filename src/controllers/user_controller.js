@@ -78,4 +78,9 @@ const register = async (req, res, next) => {
   }
 };
 
-export { login, register };
+const getAllUser = async (req, res) => {
+  const allUsers = await prisma.user.findMany();
+  res.json(allUsers);
+};
+
+export { login, register, getAllUser };

@@ -40,4 +40,22 @@ const createBook = async (req, res) => {
   }
 };
 
-export { createBook };
+const getAllBooks = async (req, res) => {
+  const allBooks = await prisma.book.findMany({
+    include: {
+      Author: {
+        select: {
+          name: true,
+        },
+      },
+      publisher: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
+  res.json(allBooks);
+};
+
+export { createBook, getAllBooks };

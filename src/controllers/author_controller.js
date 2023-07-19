@@ -22,4 +22,9 @@ const createAuthor = async (req, res) => {
   }
 };
 
-export { createAuthor };
+const getAllAuthors = async (req, res) => {
+  const allAuthors = await prisma.author.findMany();
+  res.json(allAuthors);
+};
+
+export { createAuthor, getAllAuthors };
