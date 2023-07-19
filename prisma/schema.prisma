@@ -29,7 +29,7 @@ enum Genre {
 }
 
 model Book {
-  id          String   @id @default(uuid())
+  id          String   @id @default(uuid()) 
   title       String
   price       String
   description String
