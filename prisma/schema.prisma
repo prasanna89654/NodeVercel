@@ -46,9 +46,9 @@ model Book {
 }
 
 model Author {
-  id          String   @id @default(uuid())
+  id          String  @id @default(uuid())
   name        String
-  dob         DateTime
+  dob         String?
   address     String
   description String
   Book        Book[]
