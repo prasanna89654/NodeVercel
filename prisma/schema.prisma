@@ -8,14 +8,16 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String?
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  status    Genre    @default(Horror)
-  address   String?
+  id          String   @id @default(uuid())
+  email       String   @unique
+  name        String   @unique
+  password    String
+  phone       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  address     String?
+  isPublisher Boolean  @default(false)
+  Book        Book[]
 }
 
 enum Genre {
@@ -34,10 +36,13 @@ model Book {
   price       String
   description String
   image       String?
-  author      String
   genre       Genre    @default(Horror)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  publisherId String
+  publisher   User     @relation(fields: [publisherId], references: [id])
+  Author      Author   @relation(fields: [authorId], references: [id])
+  authorId    String
 }
 
 model Author {
@@ -46,4 +51,5 @@ model Author {
   dob         DateTime
   address     String
   description String
+  Book        Book[]
 }

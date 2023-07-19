@@ -3,14 +3,15 @@ CREATE TYPE "Genre" AS ENUM ('Action', 'Adventure', 'Comedy', 'Drama', 'Fantasy'
 
 -- CreateTable
 CREATE TABLE "User" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "name" TEXT,
+    "name" TEXT NOT NULL,
     "password" TEXT NOT NULL,
+    "phone" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "status" "Genre" NOT NULL DEFAULT 'Horror',
     "address" TEXT,
+    "isPublisher" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -22,10 +23,11 @@ CREATE TABLE "Book" (
     "price" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "image" TEXT,
-    "author" TEXT NOT NULL,
-    "genre" "Genre" NOT NULL,
+    "genre" "Genre" NOT NULL DEFAULT 'Horror',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "publisherId" TEXT NOT NULL,
+    "authorId" TEXT NOT NULL,
 
     CONSTRAINT "Book_pkey" PRIMARY KEY ("id")
 );
@@ -43,3 +45,12 @@ CREATE TABLE "Author" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_name_key" ON "User"("name");
+
+-- AddForeignKey
+ALTER TABLE "Book" ADD CONSTRAINT "Book_publisherId_fkey" FOREIGN KEY ("publisherId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Book" ADD CONSTRAINT "Book_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "Author"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
