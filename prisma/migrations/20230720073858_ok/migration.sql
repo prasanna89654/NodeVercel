@@ -26,6 +26,9 @@ CREATE TABLE "Book" (
     "genre" "Genre" NOT NULL DEFAULT 'Horror',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "language" TEXT,
+    "length" TEXT,
+    "releasedAt" TEXT,
     "publisherId" TEXT NOT NULL,
     "authorId" TEXT NOT NULL,
 
@@ -36,7 +39,8 @@ CREATE TABLE "Book" (
 CREATE TABLE "Author" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "dob" TIMESTAMP(3) NOT NULL,
+    "bio" TEXT,
+    "dob" TEXT,
     "address" TEXT NOT NULL,
     "description" TEXT NOT NULL,
 
