@@ -1,8 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
-const createAuthor = async (req, res) => {
-  const { name, dob,bio, address, description } = req.body;
+const createAuthor = async (req, res, next) => {
+  const { name, dob, bio, address, description } = req.body;
 
   try {
     const author = await prisma.author.create({
@@ -16,16 +16,31 @@ const createAuthor = async (req, res) => {
     });
     res.json(author);
   } catch (err) {
-    res.json({
-      sucess: false,
-      message: err.message,
-    });
+    next(err.message);
   }
 };
 
-const getAllAuthors = async (req, res) => {
-  const allAuthors = await prisma.author.findMany();
-  res.json(allAuthors);
+const getAllAuthors = async (req, res, next) => {
+  try {
+    const allAuthors = await prisma.author.findMany();
+    res.json(allAuthors);
+  } catch (err) {
+    next(err.message);
+  }
 };
 
-export { createAuthor, getAllAuthors };
+const getAllBooksByAuthor = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const allBooksByAuthor = await prisma.book.findMany({
+      where: {
+        authorId: id,
+      },
+    });
+    res.json(allBooksByAuthor);
+  } catch (err) {
+    next(err.message);
+  }
+};
+
+export { createAuthor, getAllAuthors, getAllBooksByAuthor };
