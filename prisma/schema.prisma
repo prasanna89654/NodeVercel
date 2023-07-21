@@ -28,6 +28,7 @@ enum Genre {
   Fantasy
   Horror
   Mystery
+  Literature
 }
 
 model Book {
@@ -39,9 +40,9 @@ model Book {
   genre       Genre    @default(Horror)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  language    String
-  length      String
-  releasedAt  String
+  language    String?
+  length      String?
+  releasedAt  String?
   publisherId String
   publisher   User     @relation(fields: [publisherId], references: [id])
   Author      Author   @relation(fields: [authorId], references: [id])

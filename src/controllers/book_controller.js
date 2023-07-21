@@ -60,4 +60,20 @@ const getAllBooks = async (req, res) => {
   res.json(allBooks);
 };
 
-export { createBook, getAllBooks };
+const deleteBook = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const book = await prisma.book.delete({
+      where: {
+        id: id,
+      },
+    });
+    res.json(book);
+  } catch (err) {
+    res.json({
+      sucess: false,
+      message: err.message,
+    });
+  }
+}
+export { createBook, getAllBooks , deleteBook};
