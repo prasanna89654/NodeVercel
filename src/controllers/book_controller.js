@@ -68,7 +68,9 @@ const deleteBook = async (req, res) => {
         id: id,
       },
     });
-    res.json(book);
+    res.json({
+      "message": "Book deleted successfully"
+    });
   } catch (err) {
     res.json({
       sucess: false,
