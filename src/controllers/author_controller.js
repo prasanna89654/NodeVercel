@@ -2,12 +2,13 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 const createAuthor = async (req, res) => {
-  const { name, dob, address, description } = req.body;
+  const { name, dob,bio, address, description } = req.body;
 
   try {
     const author = await prisma.author.create({
       data: {
         name: name,
+        bio: bio,
         dob: dob,
         address: address,
         description: description,

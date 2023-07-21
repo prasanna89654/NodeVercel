@@ -12,10 +12,10 @@ model User {
   email       String   @unique
   name        String   @unique
   password    String
-  phone       String?
+  phone       String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  address     String?
+  address     String
   isPublisher Boolean  @default(false)
   Book        Book[]
 }
@@ -28,6 +28,7 @@ enum Genre {
   Fantasy
   Horror
   Mystery
+  Literature
 }
 
 model Book {
@@ -39,6 +40,9 @@ model Book {
   genre       Genre    @default(Horror)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  language    String?
+  length      String?
+  releasedAt  String?
   publisherId String
   publisher   User     @relation(fields: [publisherId], references: [id])
   Author      Author   @relation(fields: [authorId], references: [id])
@@ -48,8 +52,8 @@ model Book {
 model Author {
   id          String  @id @default(uuid())
   name        String
-  bio         String?
-  dob         String?
+  bio         String
+  dob         String
   address     String
   description String
   Book        Book[]

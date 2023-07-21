@@ -7,7 +7,18 @@ const createBook = async (req, res) => {
     const fileBuffer = req.file.buffer;
     filesv = fileBuffer.toString("base64");
   }
-  const { title, price, description, genre, authorId, publisherId } = req.body;
+  // console.log("entered");
+  const {
+    title,
+    price,
+    description,
+    genre,
+    authorId,
+    publisherId,
+    language,
+    length,
+    releasedAt,
+  } = req.body;
 
   try {
     const book = await prisma.book.create({
@@ -16,7 +27,6 @@ const createBook = async (req, res) => {
         price: price,
         description: description,
         image: filesv ?? null,
-
         genre: genre,
         Author: {
           connect: {
@@ -28,6 +38,9 @@ const createBook = async (req, res) => {
             id: publisherId,
           },
         },
+        language: language,
+        length: length,
+        releasedAt: releasedAt,
       },
     });
     res.json(book);
@@ -57,4 +70,20 @@ const getAllBooks = async (req, res) => {
   res.json(allBooks);
 };
 
-export { createBook, getAllBooks };
+const deleteBook = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const book = await prisma.book.delete({
+      where: {
+        id: id,
+      },
+    });
+    res.json(book);
+  } catch (err) {
+    res.json({
+      sucess: false,
+      message: err.message,
+    });
+  }
+};
+export { createBook, getAllBooks, deleteBook };

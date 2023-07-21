@@ -8,6 +8,4 @@ const router = express.Router();
 
 router.post("/createAuthor", createAuthor);
 
-router.get("/getAllAuthors", getAllAuthors);
-
 export default router;
