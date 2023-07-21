@@ -7,7 +7,6 @@ const createBook = async (req, res) => {
     const fileBuffer = req.file.buffer;
     filesv = fileBuffer.toString("base64");
   }
-  // console.log("entered");
   const { title, price, description, genre, authorId, publisherId } = req.body;
 
   try {
