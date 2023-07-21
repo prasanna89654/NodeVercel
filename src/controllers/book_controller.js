@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
-const createBook = async (req, res) => {
+const createBook = async (req, res, next) => {
   let filesv = null;
   if (req.file !== undefined) {
     const fileBuffer = req.file.buffer;
@@ -45,32 +45,51 @@ const createBook = async (req, res) => {
     });
     res.json(book);
   } catch (err) {
-    res.json({
-      sucess: false,
-      message: err.message,
-    });
+    next(err.message);
   }
 };
 
-const getAllBooks = async (req, res) => {
-  const allBooks = await prisma.book.findMany({
-    include: {
-      Author: {
-        select: {
-          name: true,
+const getAllBooks = async (req, res, next) => {
+  try {
+    const allBooks = await prisma.book.findMany({
+      include: {
+        Author: {
+          select: {
+            name: true,
+          },
+        },
+        publisher: {
+          select: {
+            name: true,
+          },
         },
       },
-      publisher: {
-        select: {
-          name: true,
-        },
-      },
-    },
-  });
-  res.json(allBooks);
+    });
+    res.json(allBooks);
+  } catch (err) {
+    next(err.message);
+  }
 };
 
-const deleteBook = async (req, res) => {
+const getBookById = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const book = await prisma.book.findUnique({
+      where: {
+        id: id,
+      },
+    });
+    if (book === null) {
+      next("Book not found");
+    } else {
+      res.json(book);
+    }
+  } catch (err) {
+    next(err.message);
+  }
+};
+
+const deleteBook = async (req, res, next) => {
   const { id } = req.params;
   try {
     const book = await prisma.book.delete({
@@ -78,12 +97,9 @@ const deleteBook = async (req, res) => {
         id: id,
       },
     });
-    res.json(book);
+    res.json("Book Deleted");
   } catch (err) {
-    res.json({
-      sucess: false,
-      message: err.message,
-    });
+    next(err.message);
   }
 };
-export { createBook, getAllBooks, deleteBook };
+export { createBook, getAllBooks, deleteBook, getBookById };

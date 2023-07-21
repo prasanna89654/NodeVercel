@@ -7,9 +7,12 @@ import cors from "cors";
 const app = express();
 app.use(cors());
 app.use(express.json());
+
 app.use("/user", userRoutes);
 app.use("/book", bookRoutes);
 app.use("/author", authorRoutes);
+// app.use("/favorite", favoriteRoutes);
+
 app.get("/", (req, res) => {
   res.send("Express JS on Vercel");
 });

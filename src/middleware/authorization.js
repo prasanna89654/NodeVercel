@@ -16,7 +16,8 @@ const protect = async (req, res, next) => {
           id: decoded.id,
         },
       });
-      req.user = result.rows[0];
+
+      req.user = result;
       next();
     } catch (error) {
       next(error.message);
