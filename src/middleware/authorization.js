@@ -2,7 +2,6 @@ import jwt from "jsonwebtoken";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 const protect = async (req, res, next) => {
-  console.log("protect");
   let token;
   if (
     req.headers.authorization &&
@@ -16,8 +15,13 @@ const protect = async (req, res, next) => {
           id: decoded.id,
         },
       });
+      if (result === null) {
+        res.status(401);
+        next("Not authorized");
+      } else {
+        req.user = result;
+      }
 
-      req.user = result;
       next();
     } catch (error) {
       next(error.message);

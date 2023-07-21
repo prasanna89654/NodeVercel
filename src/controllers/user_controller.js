@@ -96,11 +96,10 @@ const getAllUser = async (req, res, next) => {
 };
 
 const getUserProfile = async (req, res, next) => {
-  const id = req.user.id;
   try {
     const user = await prisma.user.findUnique({
       where: {
-        id: id,
+        id: req.user.id,
       },
     });
     res.json(user);
@@ -109,4 +108,27 @@ const getUserProfile = async (req, res, next) => {
   }
 };
 
-export { login, register, getAllUser, getUserProfile };
+const updateUserProfile = async (req, res, next) => {
+  const { name, email, password, phone, address } = req.body;
+  try {
+    const user = await prisma.user.update({
+      where: {
+        id: req.user.id,
+      },
+      data: {
+        name: name,
+        email: email,
+        password: password,
+        phone: phone,
+        address: address,
+      },
+    });
+    res.json({
+      message: "User updated successfully",
+    });
+  } catch (err) {
+    next(err.message);
+  }
+};
+
+export { login, register, getAllUser, getUserProfile, updateUserProfile };

@@ -7,14 +7,13 @@ const createBook = async (req, res, next) => {
     const fileBuffer = req.file.buffer;
     filesv = fileBuffer.toString("base64");
   }
-  // console.log("entered");
+
   const {
     title,
     price,
     description,
     genre,
     authorId,
-    publisherId,
     language,
     length,
     releasedAt,
@@ -35,7 +34,7 @@ const createBook = async (req, res, next) => {
         },
         publisher: {
           connect: {
-            id: publisherId,
+            id: req.user.id,
           },
         },
         language: language,
@@ -105,4 +104,19 @@ const deleteBook = async (req, res, next) => {
     next(err.message);
   }
 };
-export { createBook, getAllBooks, deleteBook, getBookById };
+
+const getBooksByEnum = async (req, res, next) => {
+  const { genre } = req.params;
+  try {
+    const books = await prisma.book.findMany({
+      where: {
+        genre: genre,
+      },
+    });
+    res.json(books);
+  } catch (err) {
+    next(err.message);
+  }
+};
+
+export { createBook, getAllBooks, deleteBook, getBookById, getBooksByEnum };
