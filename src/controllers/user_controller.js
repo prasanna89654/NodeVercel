@@ -91,7 +91,9 @@ const register = async (req, res, next) => {
 
 const getAllUser = async (req, res, next) => {
   try {
-    const allUsers = await prisma.user.findMany();
+    const allUsers = await prisma.user.findMany({
+      select: { id: true, email: true, name: true, address: true, isPublisher: true, phone: true },
+    });
     res.json(allUsers);
   } catch (err) {
     next(err.message);
