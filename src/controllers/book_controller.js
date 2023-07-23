@@ -73,15 +73,49 @@ const getAllBooks = async (req, res, next) => {
 const getBookById = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const book = await prisma.book.findUnique({
-      where: {
-        id: id,
-      },
-    });
-    if (book === null) {
-      next("Book not found");
+    if (req.token === null) {
+      // const getFavorite = await prisma.favorite.findFirst({
+      //   where: {
+      //     bookId: id,
+      //     userId: req.user.id,
+      //   },
+      // });
+      const book = await prisma.book.findUnique({
+        where: {
+          id: id,
+        },
+        include: {
+          isFavorite: false,
+        },
+      });
+      if (book === null) {
+        next("Book not found");
+      } else {
+        res.json(book);
+      }
     } else {
-      res.json(book);
+      if (req.user !== null) {
+        const book = await prisma.book.findUnique({
+          where: {
+            id: id,
+          },
+          include: {
+            isFavorite: {
+              where: {
+                userId: req.user.id,
+              },
+            },
+          },
+        });
+        if (book === null) {
+          next("Book not found");
+        } else {
+          res.json(book);
+        }
+      } else {
+        res.status(401);
+        next("Not authorized");
+      }
     }
   } catch (err) {
     next(err.message);
