@@ -46,7 +46,7 @@ CREATE TABLE "Author" (
 
     CONSTRAINT "Author_pkey" PRIMARY KEY ("id")
 );
-
+ 
 -- CreateTable
 CREATE TABLE "Favorite" (
     "id" TEXT NOT NULL,

@@ -131,6 +131,9 @@ const deleteBook = async (req, res, next) => {
       },
     });
     res.json("Book Deleted");
+    res.json({
+      message: "Book deleted successfully",
+    });
   } catch (err) {
     next(err.message);
   }
@@ -142,6 +145,17 @@ const getBooksByEnum = async (req, res, next) => {
     const books = await prisma.book.findMany({
       where: {
         genre: genre,
+      },
+      select: {
+        id: true,
+        title: true,
+        price: true,
+        image: true,
+        Author: {
+          select: {
+            name: true,
+          },
+        },
       },
     });
     res.json(books);
