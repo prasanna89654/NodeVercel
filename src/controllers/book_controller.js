@@ -77,6 +77,18 @@ const getBookById = async (req, res, next) => {
       where: {
         id: id,
       },
+      include: {
+        Author: {
+          select: {
+            name: true,
+          },
+        },
+        publisher: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
     if (book === null) {
       next("Book not found");
@@ -112,6 +124,17 @@ const getBooksByEnum = async (req, res, next) => {
       where: {
         genre: genre,
       },
+       select:{
+        id: true,
+        title: true,
+        price: true,
+        image: true,
+        Author:{
+          select:{
+            name: true
+          }
+        }
+       }
     });
     res.json(books);
   } catch (err) {

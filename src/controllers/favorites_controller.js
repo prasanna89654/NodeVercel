@@ -4,15 +4,41 @@ const prisma = new PrismaClient();
 const createFavorite = async (req, res, next) => {
   const { bookId } = req.body;
   try {
-    const favorite = await prisma.favorite.create({
+    const getBook = await prisma.favorite.findFirst({
+      where: {
+        bookId: bookId,
+        userId: req.user.id,
+      },
+    });
+
+    if (getBook === null) {
+
+     await prisma.favorite.create({
       data: {
         bookId: bookId,
         userId: req.user.id,
       },
     });
+
+    await prisma.book.update({
+      where: {
+        id: bookId,
+      },
+      data: {
+       isFavorite: true,
+      },
+    });
+
+
     res.json({
       message: "Added to Favorite",
     });
+  } else {
+    res.json({
+      message: "Already in Favorite",
+    });
+  }
+
   } catch (err) {
     next(err.message);
   }
@@ -25,6 +51,7 @@ const getAllFavorites = async (req, res, next) => {
         userId: req.user.id,
       },
       select: {
+        id: true,
         book: {
           include: {
             Author: {
