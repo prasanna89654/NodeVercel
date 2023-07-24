@@ -85,4 +85,24 @@ const removeFromFavorite = async (req, res, next) => {
   }
 };
 
-export { createFavorite, getAllFavorites, removeFromFavorite };
+export { createFavorite, getAllFavorites, removeFromFavorite , getMostFavorites};
+
+const getMostFavorites = async (req, res, next) => {
+  try {
+    const mostFavorites = await prisma.favorite.groupBy({
+      by: ["bookId"],
+      _count: {
+        bookId: true,
+      },
+
+      orderBy: {
+        _count: {
+          bookId: "desc",
+        },
+      },
+    });
+    res.json(mostFavorites);
+  } catch (err) {
+    next(err.message);
+  }
+};
