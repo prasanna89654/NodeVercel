@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
-
 const createFavorite = async (req, res, next) => {
   const { bookId } = req.body;
   try {
@@ -12,33 +11,44 @@ const createFavorite = async (req, res, next) => {
     });
 
     if (getBook === null) {
+      await prisma.favorite.create({
+        data: {
+          bookId: bookId,
+          userId: req.user.id,
+        },
+      });
 
-     await prisma.favorite.create({
-      data: {
-        bookId: bookId,
-        userId: req.user.id,
-      },
-    });
+      await prisma.book.update({
+        where: {
+          id: bookId,
+        },
+        data: {
+          isFavorite: true,
+        },
+      });
 
-    await prisma.book.update({
-      where: {
-        id: bookId,
-      },
-      data: {
-       isFavorite: true,
-      },
-    });
+      res.json({
+        message: "Added to Favorite",
+      });
+    } else {
+      await prisma.favorite.delete({
+        where: {
+          id: getBook.id,
+        },
+      });
 
-
-    res.json({
-      message: "Added to Favorite",
-    });
-  } else {
-    res.json({
-      message: "Already in Favorite",
-    });
-  }
-
+      await prisma.book.update({
+        where: {
+          id: bookId,
+        },
+        data: {
+          isFavorite: false,
+        },
+      });
+      res.json({
+        message: "Removed From Favorite",
+      });
+    }
   } catch (err) {
     next(err.message);
   }
@@ -69,20 +79,24 @@ const getAllFavorites = async (req, res, next) => {
   }
 };
 
-const removeFromFavorite = async (req, res, next) => {
-  const { id } = req.params;
+const getMostFavorites = async (req, res, next) => {
   try {
-    const favorite = await prisma.favorite.delete({
-      where: {
-        id: id,
+    const mostFavorites = await prisma.favorite.groupBy({
+      by: ["bookId"],
+      _count: {
+        bookId: true,
+      },
+
+      orderBy: {
+        _count: {
+          bookId: "desc",
+        },
       },
     });
-    res.json({
-      message: "Removed From Favorite",
-    });
+    res.json(mostFavorites);
   } catch (err) {
     next(err.message);
   }
 };
 
-export { createFavorite, getAllFavorites, removeFromFavorite };
+export { createFavorite, getAllFavorites, getMostFavorites };

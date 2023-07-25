@@ -8,17 +8,23 @@ datasource db {
 }
 
 model User {
-  id          String     @id @default(uuid())
-  email       String     @unique
-  name        String     @unique
+  id          String        @id @default(uuid())
+  email       String        @unique
+  name        String        @unique
   password    String
   phone       String
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  bio         String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
   address     String
-  isPublisher Boolean    @default(false)
+  isPublisher Boolean       @default(false)
   Book        Book[]
   Favorite    Favorite[]
+  Cart        Cart[]
+  Order       Order[]
+  Account     Account[]
+  Transaction Transaction[]
+  OrderItem   OrderItem[]
 }
 
 enum Genre {
@@ -52,24 +58,34 @@ enum Genre {
   Romance
 }
 
+enum OrderStatus {
+  Pending
+  Processing
+  Delivered
+  Cancelled
+}
+
 model Book {
-  id          String     @id @default(uuid())
+  id          String      @id @default(uuid())
   title       String
   price       String
   description String
   image       String?
   genre       Genre
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
   language    String?
   length      String?
   releasedAt  String?
   publisherId String
-  publisher   User       @relation(fields: [publisherId], references: [id])
-  Author      Author     @relation(fields: [authorId], references: [id])
+  publisher   User        @relation(fields: [publisherId], references: [id])
+  Author      Author      @relation(fields: [authorId], references: [id])
   authorId    String
-  isFavorite  Boolean @default(false)
+  isFavorite  Boolean     @default(false)
+  isCart      Boolean     @default(false)
   Favorite    Favorite[]
+  Cart        Cart[]
+  OrderItem   OrderItem[]
 }
 
 model Author {
@@ -88,4 +104,60 @@ model Favorite {
   bookId String
   user   User   @relation(fields: [userId], references: [id])
   book   Book   @relation(fields: [bookId], references: [id])
+}
+
+model Cart {
+  id     String @id @default(uuid())
+  userId String
+  bookId String
+  user   User   @relation(fields: [userId], references: [id])
+  book   Book   @relation(fields: [bookId], references: [id])
+}
+
+model OrderItem {
+  id          String        @id @default(uuid())
+  userId      String
+  orderId     String
+  bookId      String
+  quantity    Int
+  price       Float
+  user        User          @relation(fields: [userId], references: [id])
+  book        Book          @relation(fields: [bookId], references: [id])
+  order       Order         @relation(fields: [orderId], references: [id])
+  Transaction Transaction[]
+}
+
+model Order {
+  id          String        @id @default(uuid())
+  userId      String
+  status      OrderStatus   @default(Pending)
+  total       Float
+  createdAt   DateTime      @default(now())
+  user        User          @relation(fields: [userId], references: [id])
+  OrderItem   OrderItem[]
+  Transaction Transaction[]
+}
+
+model Transaction {
+  id          String    @id @default(uuid())
+  publisherId String
+  orderItemId String
+  orderItem   OrderItem @relation(fields: [orderItemId], references: [id])
+  user        User      @relation(fields: [publisherId], references: [id])
+  isDelivered Boolean   @default(false)
+  Order       Order?    @relation(fields: [orderId], references: [id])
+  orderId     String?
+}
+
+model Account {
+  id           String @id @default(uuid())
+  publisherId  String
+  totalCash    Float
+  deductedCash Float
+  user         User   @relation(fields: [publisherId], references: [id])
+}
+
+model AdminAccount {
+  id        String @id @default(uuid())
+  totalCash Float
 }

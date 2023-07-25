@@ -35,6 +35,7 @@ const protect = async (req, res, next) => {
 
 const nullprotect = async (req, res, next) => {
   let token;
+
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
@@ -56,6 +57,7 @@ const nullprotect = async (req, res, next) => {
   }
   if (!token) {
     req.token = null;
+    next();
   }
 };
 
