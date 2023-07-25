@@ -14,4 +14,6 @@ router.get("/getAllFavorites", protect, getAllFavorites);
 
 router.get("/getMostFavorites", protect, getMostFavorites);
 
+router.get("/getMostFavorites", getMostFavorites);
+
 export default router;
