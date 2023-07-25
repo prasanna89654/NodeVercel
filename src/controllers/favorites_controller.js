@@ -12,37 +12,53 @@ const createFavorite = async (req, res, next) => {
     });
 
     if (getBook === null) {
+      await prisma.favorite.create({
+        data: {
+          bookId: bookId,
+          userId: req.user.id,
+        },
+      });
 
-     await prisma.favorite.create({
-      data: {
-        bookId: bookId,
-        userId: req.user.id,
-      },
-    });
+      await prisma.book.update({
+        where: {
+          id: bookId,
+        },
+        data: {
+          isFavorite: true,
+        },
+      });
 
-    await prisma.book.update({
-      where: {
-        id: bookId,
-      },
-      data: {
-       isFavorite: true,
-      },
-    });
+      res.json({
+        message: "Added to Favorite",
+      });
+    } else {
+      await prisma.favorite.delete({
+        where: {
+          id: getBook.id,
+        },
+      });
 
-
-    res.json({
-      message: "Added to Favorite",
-    });
-  } else {
-    res.json({
-      message: "Already in Favorite",
-    });
-  }
-
+      await prisma.book.update({
+        where: {
+          id: bookId,
+        },
+        data: {
+          isFavorite: false,
+        },
+      });
+      res.json({
+        message: "Removed From Favorite",
+      });
+    }
   } catch (err) {
     next(err.message);
   }
 };
+
+
+
+
+
 
 const getAllFavorites = async (req, res, next) => {
   try {
