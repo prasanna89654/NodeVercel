@@ -109,7 +109,7 @@ const getUserProfile = async (req, res, next) => {
 };
 
 const updateUserProfile = async (req, res, next) => {
-  const { name, email, password, phone, address } = req.body;
+  const { name, email, password, bio } = req.body;
   try {
     const user = await prisma.user.update({
       where: {
@@ -119,8 +119,7 @@ const updateUserProfile = async (req, res, next) => {
         name: name,
         email: email,
         password: password,
-        phone: phone,
-        address: address,
+        bio: bio,
       },
     });
     res.json({

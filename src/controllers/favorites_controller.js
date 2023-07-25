@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
-
 const createFavorite = async (req, res, next) => {
   const { bookId } = req.body;
   try {
@@ -85,24 +84,6 @@ const getAllFavorites = async (req, res, next) => {
   }
 };
 
-const removeFromFavorite = async (req, res, next) => {
-  const { id } = req.params;
-  try {
-    const favorite = await prisma.favorite.delete({
-      where: {
-        id: id,
-      },
-    });
-    res.json({
-      message: "Removed From Favorite",
-    });
-  } catch (err) {
-    next(err.message);
-  }
-};
-
-export { createFavorite, getAllFavorites, removeFromFavorite , getMostFavorites};
-
 const getMostFavorites = async (req, res, next) => {
   try {
     const mostFavorites = await prisma.favorite.groupBy({
@@ -122,3 +103,5 @@ const getMostFavorites = async (req, res, next) => {
     next(err.message);
   }
 };
+
+export { createFavorite, getAllFavorites, getMostFavorites };

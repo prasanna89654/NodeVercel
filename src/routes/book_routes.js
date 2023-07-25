@@ -1,5 +1,5 @@
 import express from "express";
-import { protect } from "../middleware/authorization.js";
+import { nullprotect, protect } from "../middleware/authorization.js";
 import {
   createBook,
   getAllBooks,
@@ -14,7 +14,7 @@ const router = express.Router();
 router.post("/createBook", protect, upload.upload.single("file"), createBook);
 router.get("/getAllBooks", getAllBooks);
 router.delete("/deleteBook/:id", protect, deleteBook);
-router.get("/getBookById/:id", getBookById);
+router.get("/getBookById/:id", nullprotect, getBookById);
 router.get("/getBooksByEnum/:genre", getBooksByEnum);
 
 export default router;
