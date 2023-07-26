@@ -1,5 +1,6 @@
 import generateToken from "../utils/generateToken.js";
 import { PrismaClient } from "@prisma/client";
+import { hash, compare } from "bcrypt"
 const prisma = new PrismaClient();
 
 const login = async (req, res, next) => {
@@ -21,8 +22,8 @@ const login = async (req, res, next) => {
         next("User not found");
       } else {
         const hashed_password = result.password;
-
-        if (password !== hashed_password) {
+        // compares the password and throws boolean 
+        if ((await compare(password, hashed_password)) === false) {
           res.status(400);
           next("Password doesn't match");
         } else {
@@ -59,15 +60,17 @@ const register = async (req, res, next) => {
 
     if (emailResult === null && usernameResult === null) {
       try {
+        // encrypts the password
+        const hashedPassword = await hash(password, 10)
         const result = await prisma.user.create({
           data: {
             name: name,
             email: email,
-            password: password,
+            password: hashedPassword,
             phone: phone,
             address: address,
             isPublisher: isPublisher,
-            company: company,
+            // company: company, // company field is not specified in the schema file.
           },
         });
         res.json({
@@ -88,7 +91,9 @@ const register = async (req, res, next) => {
 
 const getAllUser = async (req, res, next) => {
   try {
-    const allUsers = await prisma.user.findMany();
+    const allUsers = await prisma.user.findMany({
+      select: { id: true, email: true, name: true, address: true, isPublisher: true, phone: true },
+    });
     res.json(allUsers);
   } catch (err) {
     next(err.message);
