@@ -177,7 +177,7 @@ const getBooksByEnum = async (req, res, next) => {
   try {
     const books = await prisma.book.findMany({
       where: {
-        genre: genre,
+        genre: Genre[parseInt(genre)],
       },
       select: {
         id: true,

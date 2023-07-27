@@ -1,5 +1,5 @@
-import generateToken from "../utils/generateToken.js";
 import { PrismaClient } from "@prisma/client";
+import generateToken from "../utils/generateToken.js";
 const prisma = new PrismaClient();
 
 const login = async (req, res, next) => {
@@ -130,4 +130,4 @@ const updateUserProfile = async (req, res, next) => {
   }
 };
 
-export { login, register, getAllUser, getUserProfile, updateUserProfile };
+export { getAllUser, getUserProfile, login, register, updateUserProfile };
