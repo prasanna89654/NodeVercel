@@ -42,6 +42,7 @@ const nullprotect = async (req, res, next) => {
   ) {
     token = req.headers.authorization.split(" ")[1];
     try {
+     
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       const result = await prisma.user.findUnique({
         where: {
@@ -49,7 +50,8 @@ const nullprotect = async (req, res, next) => {
         },
       });
       req.user = result;
-      req.token = token;
+      
+      
       next();
     } catch (error) {
       next(error.message);

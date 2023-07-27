@@ -51,22 +51,14 @@ const createBook = async (req, res, next) => {
 const getAllBooks = async (req, res, next) => {
   try {
     const allBooks = await prisma.book.findMany({
-      include: {
-        Author: {
-          select: {
-            name: true,
-          },
-        },
-        publisher: {
-          select: {
-            name: true,
-          },
-        },
+      select: {
+        id: true,
+       title: true,
+        price: true,
+        image: true,
       },
     });
-    allBooks.forEach((book) => {
-      book.genre = Genre.indexOf(book.genre);
-    });
+   
     res.json(allBooks);
   } catch (err) {
     next(err.message);
@@ -76,6 +68,7 @@ const getAllBooks = async (req, res, next) => {
 const getBookById = async (req, res, next) => {
   const { id } = req.params;
   try {
+    
     if (req.token === null) {
       const book = await prisma.book.findUnique({
         where: {
