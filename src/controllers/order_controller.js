@@ -54,7 +54,7 @@ const getAllOrders = async (req, res, next) => {
         userId: req.user.id,
       },
       include: {
-        orderItem: true,
+        OrderItem: true,
       },
     });
     res.json(allOrders);
@@ -63,4 +63,43 @@ const getAllOrders = async (req, res, next) => {
   }
 };
 
-export { createOrder, getAllOrders };
+const deleteOrder = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const order = await prisma.order.findUnique({
+      where: {
+        id: id,
+      },
+    });
+
+    await prisma.orderItem.deleteMany({
+      where: {
+        orderId: id,
+      },
+    });
+
+    await prisma.order.delete({
+      where: {
+        id: id,
+      },
+    });
+    res.json({
+      message: "Order Deleted",
+    });
+  } catch (err) {}
+};
+
+const getPublisherOrders = async (req, res, next) => {
+  try {
+    const allOrders = await prisma.order.findMany({
+      where: {
+        userId: req.user.id,
+      },
+    });
+    res.json(allOrders);
+  } catch (err) {
+    next(err.message);
+  }
+};
+
+export { createOrder, deleteOrder, getAllOrders };
