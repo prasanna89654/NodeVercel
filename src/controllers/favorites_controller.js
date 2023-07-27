@@ -54,6 +54,11 @@ const createFavorite = async (req, res, next) => {
   }
 };
 
+
+
+
+
+
 const getAllFavorites = async (req, res, next) => {
   try {
     const allFavorites = await prisma.favorite.findMany({
