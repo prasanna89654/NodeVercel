@@ -30,7 +30,7 @@ const createReading = async (req, res, next) => {
       });
 
       res.json({
-        message: "Added to Reading",
+        message: "Want to Read",
       });
     } else {
       await prisma.reading.delete({
@@ -48,7 +48,7 @@ const createReading = async (req, res, next) => {
         },
       });
       res.json({
-        message: "Removed From Reading",
+        message: "Removed From list",
       });
     }
   } catch (err) {

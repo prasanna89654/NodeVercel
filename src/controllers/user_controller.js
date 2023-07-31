@@ -46,7 +46,7 @@ const register = async (req, res, next) => {
     const fileBuffer = req.file.buffer;
     filesv = fileBuffer.toString("base64");
   }
-  const { name, email, password, phone, address, isPublisher, company} =
+  const { name, email, password, phone,bio, address, isPublisher, company} =
     req.body;
 
   try {
@@ -70,6 +70,7 @@ const register = async (req, res, next) => {
             email: email,
             password: password,
             phone: phone,
+            bio:bio,
             address: address,
             isPublisher: isPublisher,
             company: company,
