@@ -5,6 +5,7 @@ import authorRoutes from "./src/routes/author_routes.js";
 import favoriteRoutes from "./src/routes/favorites_routes.js";
 import cartRoutes from "./src/routes/cart_routes.js";
 import orderRoutes from "./src/routes/order_routes.js";
+import readingRoutes from "./src/routes/reading_routes.js";
 import express from "express";
 import cors from "cors";
 const app = express();
@@ -17,6 +18,7 @@ app.use("/author", authorRoutes);
 app.use("/favorite", favoriteRoutes);
 app.use("/cart", cartRoutes);
 app.use("/order", orderRoutes);
+app.use("/reading", readingRoutes);
 
 app.get("/", (req, res) => {
   res.send("Express JS on Vercel");

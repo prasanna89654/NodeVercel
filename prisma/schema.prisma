@@ -15,9 +15,9 @@ model User {
   phone       String
   bio         String?
   createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
   address     String
   isPublisher Boolean       @default(false)
+  image       String?
   Book        Book[]
   Favorite    Favorite[]
   Cart        Cart[]
@@ -25,6 +25,7 @@ model User {
   Account     Account[]
   Transaction Transaction[]
   OrderItem   OrderItem[]
+  Reading     Reading[]
 }
 
 enum Genre {
@@ -73,7 +74,6 @@ model Book {
   image       String?
   genre       Genre
   createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
   language    String?
   length      String?
   releasedAt  String?
@@ -81,11 +81,13 @@ model Book {
   publisher   User        @relation(fields: [publisherId], references: [id])
   Author      Author      @relation(fields: [authorId], references: [id])
   authorId    String
+  isReading   Boolean     @default(false)
   isFavorite  Boolean     @default(false)
   isCart      Boolean     @default(false)
   Favorite    Favorite[]
   Cart        Cart[]
   OrderItem   OrderItem[]
+  Reading     Reading[]   
 }
 
 model Author {
@@ -160,4 +162,11 @@ model Account {
 model AdminAccount {
   id        String @id @default(uuid())
   totalCash Float
+}
+model Reading {
+  id     String @id @default(uuid())
+  userId String
+  bookId String
+  user   User   @relation(fields: [userId], references: [id])
+  book   Book   @relation(fields: [bookId], references: [id])
 }

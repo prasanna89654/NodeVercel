@@ -1,9 +1,11 @@
 import { PrismaClient } from "@prisma/client";
+import Genre from "../utils/constants.js";
+
 const prisma = new PrismaClient();
-const createFavorite = async (req, res, next) => {
+const createReading = async (req, res, next) => {
   const { bookId } = req.body;
   try {
-    const getBook = await prisma.favorite.findFirst({
+    const getBook = await prisma.reading.findFirst({
       where: {
         bookId: bookId,
         userId: req.user.id,
@@ -11,7 +13,7 @@ const createFavorite = async (req, res, next) => {
     });
 
     if (getBook === null) {
-      await prisma.favorite.create({
+      await prisma.reading.create({
         data: {
           bookId: bookId,
           userId: req.user.id,
@@ -23,15 +25,15 @@ const createFavorite = async (req, res, next) => {
           id: bookId,
         },
         data: {
-          isFavorite: true,
+          isReading: true,
         },
       });
 
       res.json({
-        message: "Added to Favorite",
+        message: "Added to Reading",
       });
     } else {
-      await prisma.favorite.delete({
+      await prisma.reading.delete({
         where: {
           id: getBook.id,
         },
@@ -42,11 +44,11 @@ const createFavorite = async (req, res, next) => {
           id: bookId,
         },
         data: {
-          isFavorite: false,
+          isReading: false,
         },
       });
       res.json({
-        message: "Removed From Favorite",
+        message: "Removed From Reading",
       });
     }
   } catch (err) {
@@ -54,16 +56,26 @@ const createFavorite = async (req, res, next) => {
   }
 };
 
-const getAllFavorites = async (req, res, next) => {
+
+
+
+
+
+const getAllReading = async (req, res, next) => {
   try {
-    const allFavorites = await prisma.favorite.findMany({
+    const allReading = await prisma.reading.findMany({
       where: {
         userId: req.user.id,
       },
       select: {
         id: true,
+        
         book: {
-          include: {
+          select: {
+            id: true,
+            title: true,
+            image: true,
+            genre: true,
             Author: {
               select: {
                 name: true,
@@ -73,30 +85,15 @@ const getAllFavorites = async (req, res, next) => {
         },
       },
     });
-    res.json(allFavorites);
-  } catch (err) {
-    next(err.message);
-  }
-};
-
-const getMostFavorites = async (req, res, next) => {
-  try {
-    const mostFavorites = await prisma.favorite.groupBy({
-      by: ["bookId"],
-      _count: {
-        bookId: true,
-      },
-
-      orderBy: {
-        _count: {
-          bookId: "desc",
-        },
-      },
+    allReading.forEach((reading) => {
+      reading.book.genre = Genre.indexOf(reading.book.genre);
     });
-    res.json(mostFavorites);
+    res.json(allReading);
   } catch (err) {
     next(err.message);
   }
 };
 
-export { createFavorite, getAllFavorites, getMostFavorites };
+
+
+export { createReading, getAllReading };

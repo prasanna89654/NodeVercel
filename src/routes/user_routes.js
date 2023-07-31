@@ -7,12 +7,14 @@ import {
   getUserProfile,
   updateUserProfile,
 } from "../controllers/user_controller.js";
+import upload from "../middleware/errorMiddleware.js";
+
 
 const router = express.Router();
 
 router.post("/login", login);
 
-router.post("/register", register);
+router.post("/register", upload.upload.single("file"), register);
 
 router.get("/getAllUsers", getAllUser);
 

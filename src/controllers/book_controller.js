@@ -92,6 +92,7 @@ const getBookById = async (req, res, next) => {
         next("Book not found");
       } else {
         book.genre = Genre.indexOf(book.genre);
+        book.isReading = false;
         book.isFavorite = false;
         book.isCart = false;
         res.json(book);
@@ -106,6 +107,12 @@ const getBookById = async (req, res, next) => {
         });
 
         const getCart = await prisma.cart.findFirst({
+          where: {
+            bookId: id,
+            userId: req.user.id,
+          },
+        });
+        const getReading = await prisma.reading.findFirst({
           where: {
             bookId: id,
             userId: req.user.id,
@@ -136,6 +143,7 @@ const getBookById = async (req, res, next) => {
           book.genre = Genre.indexOf(book.genre);
           book.isFavorite = getFavorite !== null ? true : false;
           book.isCart = getCart !== null ? true : false;
+          book.isReading = getReading !== null ? true : false;
           res.json(book);
         }
       } else {
@@ -190,4 +198,4 @@ const getBooksByEnum = async (req, res, next) => {
   }
 };
 
-export { createBook, deleteBook, getAllBooks, getBookById, getBooksByEnum };
+export { createBook, getAllBooks, deleteBook, getBookById, getBooksByEnum };
