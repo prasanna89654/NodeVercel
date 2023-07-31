@@ -1,5 +1,5 @@
 import express from "express";
-import { protect } from "../middleware/authorization.js";
+import { nullprotect, protect } from "../middleware/authorization.js";
 import {
   createFavorite,
   getAllFavorites,
@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.post("/createFavorite", protect, createFavorite);
 
-router.get("/getAllFavorites", protect, getAllFavorites);
+router.get("/getAllFavorites", nullprotect, getAllFavorites);
 
 router.get("/getMostFavorites", protect, getMostFavorites);
 

@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import Genre from "../utils/constants.js";
 const prisma = new PrismaClient();
 const createFavorite = async (req, res, next) => {
   const { bookId } = req.body;
@@ -54,31 +55,38 @@ const createFavorite = async (req, res, next) => {
   }
 };
 
-
-
-
-
-
 const getAllFavorites = async (req, res, next) => {
   try {
-    const allFavorites = await prisma.favorite.findMany({
-      where: {
-        userId: req.user.id,
-      },
-      select: {
-        id: true,
-        book: {
-          include: {
-            Author: {
-              select: {
-                name: true,
+    if (req.token !== null) {
+      const allFavorites = await prisma.favorite.findMany({
+        where: {
+          userId: req.user.id,
+        },
+        select: {
+          id: true,
+          book: {
+            select: {
+              id: true,
+              title: true,
+              genre: true,
+
+              image: true,
+              Author: {
+                select: {
+                  name: true,
+                },
               },
             },
           },
         },
-      },
-    });
-    res.json(allFavorites);
+      });
+      allFavorites.forEach((element) => {
+        element.book.genre = Genre.indexOf(element.book.genre);
+      });
+      res.json(allFavorites);
+    } else {
+      res.json([]);
+    }
   } catch (err) {
     next(err.message);
   }
