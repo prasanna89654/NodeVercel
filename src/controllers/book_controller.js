@@ -1,17 +1,40 @@
 import { PrismaClient } from "@prisma/client";
+import Cloudinary from "cloudinary";
+import datauri from "datauri/parser.js";
+import path from "path";
+
+// import cloudinary from "../middleware/errorMiddleware.js";
 import Genre from "../utils/constants.js";
 const prisma = new PrismaClient();
+const duri = new datauri();
+Cloudinary.config({
+  cloud_name: "duywmtg1a",
+  api_key: "435642427716696",
+  api_secret: "y6chNk_cFJXvuRXmwgGSipPTa4Y",
+});
 
 const createBook = async (req, res, next) => {
   let filesv = null;
   if (req.file !== undefined) {
-    const fileBuffer = req.file.buffer;
-    filesv = fileBuffer.toString("base64");
+    try {
+      const file64 = duri.format(
+        path.extname(req.file.originalname).toString(),
+        req.file.buffer
+      ).content;
+
+      const uploads = await Cloudinary.v2.uploader.upload(file64, {
+        folder: "bookstore",
+      });
+      filesv = uploads.secure_url;
+    } catch (err) {
+      next(err.message);
+    }
   }
 
   const {
     title,
     price,
+    bio,
     description,
     genre,
     authorId,
@@ -25,6 +48,7 @@ const createBook = async (req, res, next) => {
       data: {
         title: title,
         price: price,
+        bio: bio,
         description: description,
         image: filesv ?? null,
         genre: genre,
@@ -43,6 +67,7 @@ const createBook = async (req, res, next) => {
         releasedAt: releasedAt,
       },
     });
+
     res.json(book);
   } catch (err) {
     next(err.message);
@@ -198,4 +223,23 @@ const getBooksByEnum = async (req, res, next) => {
   }
 };
 
-export { createBook, getAllBooks, deleteBook, getBookById, getBooksByEnum };
+const deleteFromCloudinary = async (req, res, next) => {
+  // const { id } = req.params;
+  try {
+    const ok = await Cloudinary.v2.uploader.destroy(
+      "bookstore/xd2pvamiyvhsavwnbqcc"
+    );
+    res.json(ok);
+  } catch (err) {
+    next(err.message);
+  }
+};
+
+export {
+  createBook,
+  deleteBook,
+  deleteFromCloudinary,
+  getAllBooks,
+  getBookById,
+  getBooksByEnum,
+};

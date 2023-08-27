@@ -20,9 +20,9 @@ const protect = async (req, res, next) => {
         next("Not authorized");
       } else {
         req.user = result;
-      }
 
-      next();
+        next();
+      }
     } catch (error) {
       next(error.message);
     }

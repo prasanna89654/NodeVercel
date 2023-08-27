@@ -29,4 +29,6 @@ const Genre = [
   "Romance",
 ];
 
+const OrderStatus = ["Pending", "Processing", "Delivered", "Cancelled"];
+
 export default Genre;

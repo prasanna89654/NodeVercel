@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import Genre from "../utils/constants.js";
 const prisma = new PrismaClient();
 const createFavorite = async (req, res, next) => {
   const { bookId } = req.body;
@@ -62,8 +63,13 @@ const getAllFavorites = async (req, res, next) => {
       },
       select: {
         id: true,
+
         book: {
-          include: {
+          select: {
+            id: true,
+            title: true,
+            image: true,
+            genre: true,
             Author: {
               select: {
                 name: true,
@@ -72,6 +78,9 @@ const getAllFavorites = async (req, res, next) => {
           },
         },
       },
+    });
+    allFavorites.forEach((favorite) => {
+      favorite.book.genre = Genre.indexOf(favorite.book.genre);
     });
     res.json(allFavorites);
   } catch (err) {

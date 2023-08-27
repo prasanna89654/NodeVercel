@@ -31,6 +31,7 @@ const login = async (req, res, next) => {
           res.json({
             token: token,
             isPublisher: result.isPublisher,
+            message: "Login successful",
           });
         }
       }
@@ -46,7 +47,7 @@ const register = async (req, res, next) => {
     const fileBuffer = req.file.buffer;
     filesv = fileBuffer.toString("base64");
   }
-  const { name, email, password, phone, address, isPublisher, company} =
+  const { name, email, password, bio, phone, address, isPublisher, company } =
     req.body;
 
   try {
@@ -68,6 +69,7 @@ const register = async (req, res, next) => {
           data: {
             name: name,
             email: email,
+            bio: bio,
             password: password,
             phone: phone,
             address: address,
@@ -115,7 +117,7 @@ const getUserProfile = async (req, res, next) => {
 };
 
 const updateUserProfile = async (req, res, next) => {
-  const { name, email, password, bio ,image} = req.body;
+  const { name, email, password, bio, image } = req.body;
   try {
     const user = await prisma.user.update({
       where: {

@@ -36,6 +36,7 @@ const createOrder = async (req, res, next) => {
           },
           quantity: book.quantity,
           price: book.price,
+          publisherId: book.publisherId,
         },
       });
     });
@@ -89,14 +90,20 @@ const deleteOrder = async (req, res, next) => {
   } catch (err) {}
 };
 
-const getPublisherOrders = async (req, res, next) => {
+const change = async (req, res, next) => {
+  const { id } = req.params;
   try {
-    const allOrders = await prisma.order.findMany({
+    await prisma.order.update({
       where: {
-        userId: req.user.id,
+        id: id,
+      },
+      data: {
+        status: "Confirmed",
       },
     });
-    res.json(allOrders);
+    res.json({
+      message: "Order Confirmed",
+    });
   } catch (err) {
     next(err.message);
   }
