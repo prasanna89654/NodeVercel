@@ -20,9 +20,9 @@ const protect = async (req, res, next) => {
         next("Not authorized");
       } else {
         req.user = result;
-      }
 
-      next();
+        next();
+      }
     } catch (error) {
       next(error.message);
     }
@@ -48,7 +48,13 @@ const nullprotect = async (req, res, next) => {
           id: decoded.id,
         },
       });
-      req.user = result;
+      if (result === null) {
+        res.status(401);
+        next("Not authorized");
+      } else {
+        req.user = result;
+      }
+
       next();
     } catch (error) {
       next(error.message);

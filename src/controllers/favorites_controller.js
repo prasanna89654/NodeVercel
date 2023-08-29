@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 import Genre from "../utils/constants.js";
-
 const prisma = new PrismaClient();
 const createFavorite = async (req, res, next) => {
   const { bookId } = req.body;
@@ -56,11 +55,6 @@ const createFavorite = async (req, res, next) => {
   }
 };
 
-
-
-
-
-
 const getAllFavorites = async (req, res, next) => {
   try {
     const allFavorites = await prisma.favorite.findMany({
@@ -69,7 +63,7 @@ const getAllFavorites = async (req, res, next) => {
       },
       select: {
         id: true,
-        
+
         book: {
           select: {
             id: true,

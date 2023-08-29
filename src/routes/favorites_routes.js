@@ -1,10 +1,10 @@
 import express from "express";
-import { protect } from "../middleware/authorization.js";
 import {
   createFavorite,
   getAllFavorites,
   getMostFavorites,
 } from "../controllers/favorites_controller.js";
+import { protect } from "../middleware/authorization.js";
 
 const router = express.Router();
 
