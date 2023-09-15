@@ -68,7 +68,7 @@ enum OrderStatus {
 model Book {
   id          String      @id @default(uuid())
   title       String
-  price       String
+  price       Float
   description String
   image       String?
   genre       Genre
@@ -124,6 +124,7 @@ model OrderItem {
   orderId     String
   bookId      String
   status      OrderStatus @default(Pending)
+  bookname    String?
   quantity    Int
   price       Float
   user        User        @relation(fields: [userId], references: [id])

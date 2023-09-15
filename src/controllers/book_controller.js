@@ -47,7 +47,7 @@ const createBook = async (req, res, next) => {
     const book = await prisma.book.create({
       data: {
         title: title,
-        price: price,
+        price: parseFloat(price),
         bio: bio,
         description: description,
         image: filesv ?? null,

@@ -24,7 +24,7 @@ CREATE TABLE "User" (
 CREATE TABLE "Book" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
-    "price" TEXT NOT NULL,
+    "price" DOUBLE PRECISION NOT NULL,
     "description" TEXT NOT NULL,
     "image" TEXT,
     "genre" "Genre" NOT NULL,
@@ -80,6 +80,8 @@ CREATE TABLE "OrderItem" (
     "publisherId" TEXT NOT NULL,
     "orderId" TEXT NOT NULL,
     "bookId" TEXT NOT NULL,
+    "status" "OrderStatus" NOT NULL DEFAULT 'Pending',
+    "bookname" TEXT,
     "quantity" INTEGER NOT NULL,
     "price" DOUBLE PRECISION NOT NULL,
 
