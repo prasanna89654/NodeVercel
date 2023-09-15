@@ -119,8 +119,7 @@ const getUserProfile = async (req, res, next) => {
 
 const updateUserProfile = async (req, res, next) => {
   const { name, email, password, bio, image } = req.body;
-  try {
-    const user = await prisma.user.update({
+  try { const user = await prisma.user.update({
       where: {
         id: req.user.id,
       },

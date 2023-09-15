@@ -80,6 +80,7 @@ CREATE TABLE "OrderItem" (
     "publisherId" TEXT NOT NULL,
     "orderId" TEXT NOT NULL,
     "bookId" TEXT NOT NULL,
+    "status" "OrderStatus" NOT NULL DEFAULT 'Pending',
     "quantity" INTEGER NOT NULL,
     "price" DOUBLE PRECISION NOT NULL,
 
