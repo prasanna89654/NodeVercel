@@ -37,6 +37,9 @@ const createOrder = async (req, res, next) => {
           quantity: book.quantity,
           price: book.price,
           publisherId: book.publisherId,
+         
+         
+         
         },
       });
     });
@@ -55,9 +58,29 @@ const getAllOrders = async (req, res, next) => {
         userId: req.user.id,
       },
       include: {
-        OrderItem: true,
+        user:{
+          select:{  
+            name:true,
+          
+        }},
+        OrderItem: {
+
+        select: {
+          quantity: true,
+          price: true,
+          status  : true,
+          book: {
+            select: {
+              title: true,
+            }}}
+        }
+
       },
+     
     });
+    
+    
+
     res.json(allOrders);
   } catch (err) {
     next(err.message);

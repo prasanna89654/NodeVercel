@@ -72,7 +72,6 @@ const register = async (req, res, next) => {
             bio: bio,
             password: password,
             phone: phone,
-            bio: bio,
             address: address,
             isPublisher: isPublisher,
             company: company,
