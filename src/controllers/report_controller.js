@@ -60,4 +60,30 @@ const getAdminReport = async (req, res, next) => {
   }
 };
 
-export { getAdminReport, getAllOrders, getPublisherOrders, getPublisherReport };
+const searchBook = async (req, res, next) => {
+  try{
+    const {title} = req.query;
+    const books = await prisma.book.findMany({
+      where:{
+        title:{
+          contains:title,
+          mode:"insensitive"
+        }
+       
+      },
+      select:{
+        id: true,
+        title: true,
+        price: true,
+        image: true,
+
+      }
+    })
+    res.json(books);
+
+  }catch(err){
+    next(err.message);
+  }
+}
+
+export { getAdminReport, getAllOrders, getPublisherOrders, getPublisherReport, searchBook };
