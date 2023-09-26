@@ -81,10 +81,7 @@ CREATE TABLE "OrderItem" (
     "orderId" TEXT NOT NULL,
     "bookId" TEXT NOT NULL,
     "status" "OrderStatus" NOT NULL DEFAULT 'Pending',
-<<<<<<<< HEAD:prisma/migrations/20230827055109_sese/migration.sql
-========
     "bookname" TEXT,
->>>>>>>> a0015d43409ec506c64405c2eaaf6da1ba0520ea:prisma/migrations/20230915015422_okkk/migration.sql
     "quantity" INTEGER NOT NULL,
     "price" DOUBLE PRECISION NOT NULL,
 

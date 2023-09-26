@@ -190,7 +190,7 @@ const deleteBook = async (req, res, next) => {
         id: id,
       },
     });
-    res.json("Book Deleted");
+   
     res.json({
       message: "Book deleted successfully",
     });
