@@ -40,11 +40,9 @@ const createOrder = async (req, res, next) => {
         },
       });
     });
-    payment == 0?
-    res.json(order):
     res.json({
-      'message':'Order Created'
-    })
+      message: "Order Created",
+    });
   } catch (err) {
     next(err.message);
   }
