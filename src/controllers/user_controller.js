@@ -1,7 +1,17 @@
 import { PrismaClient } from "@prisma/client";
 import generateToken from "../utils/generateToken.js";
 const prisma = new PrismaClient();
+import Cloudinary from "cloudinary";
 
+import datauri from "datauri/parser.js";
+import path from "path";
+
+Cloudinary.config({
+  cloud_name: "duywmtg1a",
+  api_key: "435642427716696",
+  api_secret: "y6chNk_cFJXvuRXmwgGSipPTa4Y",
+});
+const duri = new datauri();
 const login = async (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password) {

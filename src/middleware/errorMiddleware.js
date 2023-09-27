@@ -1,5 +1,4 @@
 import multer from "multer";
-
 // const cloudinary = Cloudinary.config({
 //   cloud_name: "duywmtg1a",
 //   api_key: "435642427716696",
@@ -16,5 +15,6 @@ const storage = multer.memoryStorage();
 const upload = multer({
   storage: storage,
 });
+
 
 export default { errorHandler, upload };
