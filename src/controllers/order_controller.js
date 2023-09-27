@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 const createOrder = async (req, res, next) => {
-  const { total, books } = req.body;
+  const { total, payment , books } = req.body;
   try {
     const order = await prisma.order.create({
       data: {
@@ -37,13 +37,12 @@ const createOrder = async (req, res, next) => {
           quantity: book.quantity,
           price: book.price,
           publisherId: book.publisherId,
-         
-         
-         
         },
       });
     });
-    res.json(order);
+    res.json({
+      message: "Order Created",
+    });
   } catch (err) {
     next(err.message);
   }
@@ -54,6 +53,9 @@ const getAllOrders = async (req, res, next) => {
     const allOrders = await prisma.order.findMany({
       where: {
         userId: req.user.id,
+      },
+      orderBy:{
+        createdAt:'desc'
       },
       include: {
         user:{
@@ -84,6 +86,27 @@ const getAllOrders = async (req, res, next) => {
     next(err.message);
   }
 };
+
+const makePayment= async (req, res, next) => {
+  const { id } = req.query;
+  try {
+    await prisma.order.update({
+      where: {
+        id: id,
+      },
+      data: {
+        isPayment: true
+      }
+    })
+    res.json({
+      message: "Order Created",
+    });
+  }
+  catch (err) {
+    next(err.message);
+  }
+}
+
 
 const deleteOrder = async (req, res, next) => {
   const { id } = req.params;
@@ -130,4 +153,4 @@ const change = async (req, res, next) => {
   }
 };
 
-export { createOrder, deleteOrder, getAllOrders };
+export { createOrder, deleteOrder, getAllOrders, makePayment };
