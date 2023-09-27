@@ -43,9 +43,7 @@ const createOrder = async (req, res, next) => {
         },
       });
     });
-    res.json({
-      message: "Order Created",
-    });
+    res.json(order);
   } catch (err) {
     next(err.message);
   }
