@@ -118,6 +118,7 @@ const getBookById = async (req, res, next) => {
       } else {
         book.genre = Genre.indexOf(book.genre);
         book.isReading = false;
+        
         book.isFavorite = false;
         book.isCart = false;
         res.json(book);
@@ -189,7 +190,7 @@ const deleteBook = async (req, res, next) => {
         id: id,
       },
     });
-    res.json("Book Deleted");
+   
     res.json({
       message: "Book deleted successfully",
     });
