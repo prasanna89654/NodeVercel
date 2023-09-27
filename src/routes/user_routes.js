@@ -20,6 +20,6 @@ router.get("/getAllUsers", getAllUser);
 
 router.get("/getUserProfile", protect, getUserProfile);
 
-router.put("/updateUserProfile", protect, updateUserProfile);
+router.put("/updateUserProfile", protect, upload.upload.single("file"), updateUserProfile);
 
 export default router;

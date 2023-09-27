@@ -117,7 +117,23 @@ const getUserProfile = async (req, res, next) => {
 };
 
 const updateUserProfile = async (req, res, next) => {
-  const { name, email, password, bio, image } = req.body;
+  let filesv = null;
+  if (req.file !== undefined) {
+    try {
+      const file64 = duri.format(
+        path.extname(req.file.originalname).toString(),
+        req.file.buffer
+      ).content;
+
+      const uploads = await Cloudinary.v2.uploader.upload(file64, {
+        folder: "bookstore",
+      });
+      filesv = uploads.secure_url;
+    } catch (err) {
+      next(err.message);
+    }
+  }
+  const { name, email, password, bio } = req.body;
   try { const user = await prisma.user.update({
       where: {
         id: req.user.id,
@@ -127,7 +143,7 @@ const updateUserProfile = async (req, res, next) => {
         email: email,
         password: password,
         bio: bio,
-        image: image,
+        image: filesv,
       },
     });
     res.json({
