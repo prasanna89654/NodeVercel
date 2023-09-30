@@ -18,6 +18,7 @@ model User {
   address     String
   isPublisher Boolean     @default(false)
   image       String?
+  isAdmin     Boolean     @default(false)
   Book        Book[]
   Favorite    Favorite[]
   Cart        Cart[]
@@ -25,6 +26,7 @@ model User {
   Account     Account[]
   OrderItem   OrderItem[]
   Reading     Reading[]
+  AdminAccount AdminAccount[]
 }
 
 enum Genre {
@@ -155,16 +157,16 @@ model Order {
 // }
 
 model Account {
-  id           String @id @default(uuid())
-  publisherId  String
+  publisherId  String @id
   totalCash    Float
   deductedCash Float
   user         User   @relation(fields: [publisherId], references: [id])
 }
 
 model AdminAccount {
-  id        String @id @default(uuid())
+  uid        String @id @default(uuid())
   totalCash Float
+  user         User   @relation(fields: [uid], references: [id])
 }
 
 model Reading {

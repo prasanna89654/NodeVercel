@@ -1,6 +1,38 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
+const getPublisherAccount = async (req, res, next) => {
+  try {
+    const account = await prisma.account.findUnique({
+      where: {
+        publisherId: req.user.id,
+      },
+      
+    });
+    res.json(account);
+  }
+  catch(err){
+    next(err.message);
+  }
+}
+
+const getAdminAccount = async (req, res, next) => {
+  try {
+    const account = await prisma.adminAccount.findUnique({
+      where: {
+        uid: req.user.id,
+      },
+      
+    });
+    res.json(account);
+  }
+  catch(err){
+    next(err.message);
+  }
+}
+
+
+
 const getPublisherOrders = async (req, res, next) => {
   try {
     const allOrders = await prisma.orderItem.findMany({
@@ -86,4 +118,4 @@ const searchBook = async (req, res, next) => {
   }
 }
 
-export { getAdminReport, getAllOrders, getPublisherOrders, getPublisherReport, searchBook };
+export { getAdminReport, getAllOrders, getPublisherOrders, getPublisherReport, searchBook , getPublisherAccount, getAdminAccount};

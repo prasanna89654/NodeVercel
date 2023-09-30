@@ -13,6 +13,4 @@ router.post("/createReading", protect, createReading);
 
 router.get("/getAllReading", protect,getAllReading);
 
-
-
 export default router;
