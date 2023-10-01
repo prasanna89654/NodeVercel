@@ -18,6 +18,7 @@ model User {
   address     String
   isPublisher Boolean     @default(false)
   image       String?
+  isAdmin     Boolean     @default(false)
   Book        Book[]
   Favorite    Favorite[]
   Cart        Cart[]
