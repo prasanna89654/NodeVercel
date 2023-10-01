@@ -40,6 +40,7 @@ const createOrder = async (req, res, next) => {
         },
       });
     });
+    
     res.json({
       message: "Order Created",
     });
@@ -61,10 +62,8 @@ const getAllOrders = async (req, res, next) => {
         user:{
           select:{  
             name:true,
-          
         }},
         OrderItem: {
-
         select: {
           quantity: true,
           price: true,
@@ -74,13 +73,8 @@ const getAllOrders = async (req, res, next) => {
               title: true,
             }}}
         }
-
       },
-     
     });
-    
-    
-
     res.json(allOrders);
   } catch (err) {
     next(err.message);
@@ -90,6 +84,16 @@ const getAllOrders = async (req, res, next) => {
 const makePayment= async (req, res, next) => {
   const { id } = req.query;
   try {
+    
+    const order = await prisma.order.findUnique({
+      where: {
+        id: id,
+      },
+      include:{
+        OrderItem:true
+      }
+    });
+
     await prisma.order.update({
       where: {
         id: id,
@@ -98,6 +102,52 @@ const makePayment= async (req, res, next) => {
         isPayment: true
       }
     })
+    
+    order.OrderItem.forEach(async (item) => {
+      const accounts = await prisma.account.findFirst({
+        where: {
+          publisherId: item.publisherId,
+        }
+      })
+     
+      await prisma.account.update({
+        where: {
+          publisherId: item.publisherId,
+        },
+        data: {
+          totalCash: accounts.totalCash + item.price * 0.85,
+          deductedCash:accounts.deductedCash+ item.price * 0.15,
+        }
+       })
+})
+
+
+    const users = await prisma.user.findFirst({
+      where: {
+      isAdmin: true
+      }
+
+    })
+
+    const admins = await prisma.adminAccount.findFirst({
+      where: {
+        uid: users.id
+      }
+    })
+
+    const total = order.total -100
+
+    await prisma.adminAccount.update({ 
+      where: {
+        uid: users.id
+      },
+      data:{
+        totalCash: admins.totalCash +  total * 0.15,
+      }
+  })
+
+ 
+
     res.json({
       message: "Order Created",
     });

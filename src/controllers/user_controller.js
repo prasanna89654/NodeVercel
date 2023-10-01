@@ -58,7 +58,7 @@ const register = async (req, res, next) => {
     const fileBuffer = req.file.buffer;
     filesv = fileBuffer.toString("base64");
   }
-  const { name, email, password, phone, bio, address, isPublisher, company } =
+  const { name, email, password, phone, bio, address, isPublisher, company, image } =
     req.body;
 
   try {
@@ -86,9 +86,25 @@ const register = async (req, res, next) => {
             address: address,
             isPublisher: isPublisher,
             company: company,
-            image: filesv ?? null,
+            image: filesv ?? image??null,
           },
         });
+
+        if(isPublisher){
+          await prisma.account.create({
+            data:{
+              user: {
+                connect: {
+                  id: result.id,
+                },
+              },
+              totalCash: 0,
+              deductedCash:0,
+
+            }
+          })
+        }
+
         res.json({
           message: "User created successfully",
         });
@@ -165,4 +181,22 @@ const updateUserProfile = async (req, res, next) => {
   }
 };
 
-export { getAllUser, getUserProfile, login, register, updateUserProfile };
+const deleteUser = async (req, res, next) => {
+  const { id } = req.query;
+  try {
+    const user = await prisma.user.delete({
+      where: {
+        id: id,
+      },
+    });
+    res.json({
+      message: "User deleted successfully",
+    });
+  } catch (err) {
+    next(err.message);
+  }
+}
+
+
+
+export { getAllUser, getUserProfile, login, register, updateUserProfile, deleteUser };
