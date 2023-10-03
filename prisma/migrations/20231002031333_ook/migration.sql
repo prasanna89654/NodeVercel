@@ -16,6 +16,7 @@ CREATE TABLE "User" (
     "address" TEXT NOT NULL,
     "isPublisher" BOOLEAN NOT NULL DEFAULT false,
     "image" TEXT,
+    "isAdmin" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -102,20 +103,19 @@ CREATE TABLE "Order" (
 
 -- CreateTable
 CREATE TABLE "Account" (
-    "id" TEXT NOT NULL,
     "publisherId" TEXT NOT NULL,
     "totalCash" DOUBLE PRECISION NOT NULL,
     "deductedCash" DOUBLE PRECISION NOT NULL,
 
-    CONSTRAINT "Account_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Account_pkey" PRIMARY KEY ("publisherId")
 );
 
 -- CreateTable
 CREATE TABLE "AdminAccount" (
-    "id" TEXT NOT NULL,
+    "uid" TEXT NOT NULL,
     "totalCash" DOUBLE PRECISION NOT NULL,
 
-    CONSTRAINT "AdminAccount_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "AdminAccount_pkey" PRIMARY KEY ("uid")
 );
 
 -- CreateTable
@@ -165,6 +165,9 @@ ALTER TABLE "Order" ADD CONSTRAINT "Order_userId_fkey" FOREIGN KEY ("userId") RE
 
 -- AddForeignKey
 ALTER TABLE "Account" ADD CONSTRAINT "Account_publisherId_fkey" FOREIGN KEY ("publisherId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "AdminAccount" ADD CONSTRAINT "AdminAccount_uid_fkey" FOREIGN KEY ("uid") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Reading" ADD CONSTRAINT "Reading_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -10,7 +10,6 @@ import {
 } from "../controllers/user_controller.js";
 import upload from "../middleware/errorMiddleware.js";
 
-
 const router = express.Router();
 
 router.post("/login", login);

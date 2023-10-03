@@ -9,6 +9,7 @@ import orderRoutes from "./src/routes/order_routes.js";
 import readingRoutes from "./src/routes/reading_routes.js";
 import reportRoutes from "./src/routes/report_routes.js";
 import userRoutes from "./src/routes/user_routes.js";
+import authRoutes from "./src/routes/auth_routes.js";
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -21,6 +22,7 @@ app.use("/cart", cartRoutes);
 app.use("/order", orderRoutes);
 app.use("/reading", readingRoutes);
 app.use("/report", reportRoutes);
+app.use("/auth", authRoutes);
 
 app.get("/", (req, res) => {
   res.send("Express JS on Vercel");
