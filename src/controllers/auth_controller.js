@@ -8,15 +8,7 @@ const sendMail= async (req, res, next) => {
 
     const { email } = req.body;
 
-
 try{
-   
-    
-  
-    
-
-
-
     let config = {
         host: "smtp.gmail.com",
         port: 465,
