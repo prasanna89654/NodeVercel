@@ -5,9 +5,7 @@ otp = otp * 1000000;
 otp = parseInt(otp);
 
 const sendMail= async (req, res, next) => {
-
     const { email } = req.body;
-
 try{
     let config = {
         host: "smtp.gmail.com",
@@ -19,9 +17,7 @@ try{
             pass: 'gybkvbmcxgzbuzke'
         }
     }
-
     let transporter = nodemailer.createTransport(config);
-
     var mailOptions={
          from: 'poudellprasanna789@gmail.com',
         to: email,
