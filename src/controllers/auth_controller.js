@@ -1,11 +1,14 @@
 import nodemailer from 'nodemailer';
 import fs from 'fs';
-var otp = Math.floor(Math.random() * 900000) + 100000
+import textflow from 'textflow.js'
+
+textflow.useKey("M2r0T1ygGLz0qIz5yqrjsW0MfrjH5PBRVybwhd2XXLu93UdFAAY8uzXMzDGHMUBg");
+var otp = Math.random();
+otp = otp * 1000000;
+otp = parseInt(otp);
 
 const sendMail= async (req, res, next) => {
-
     const { email } = req.body;
-
 try{
     let config = {
         host: "smtp.gmail.com",
@@ -17,9 +20,7 @@ try{
             pass: 'inobzbmaxcbqgbqy'
         }
     }
-
     let transporter = nodemailer.createTransport(config);
-
     var mailOptions={
         from: 'bookstack0101@gmail.com',
         to: email,
@@ -59,7 +60,6 @@ catch(err){
 }
 
 
-
 const verifyotp = (req,res, next)=> {
         const {email, userotp}  = req.body;
         const jsonData = JSON.parse(fs.readFileSync('otp.json', 'utf8'));
@@ -73,18 +73,38 @@ const verifyotp = (req,res, next)=> {
         else{
            next("Incorrect OTP")
         }
-
-
-     
     } 
     
-    
 
+    
+const sendMsg = async (req, res, next) => {
+    const { phone } = req.body;
+
+    const verificationOptions ={
+        service_name: 'My super cool app',
+        seconds: 600,
+    }
+
+    const result = await textflow.sendVerificationSMS(phone, verificationOptions);
+
+    return res.status(result.status).json(result.message)
+}
+
+const verifyMsg = (req, res, next) => {
+    const { phone, userOtp } = req.body;
+    if (otp == userOtp) {
+        res.json({
+            message: "OTP verified successfully"
+        })
+    } else {
+        next("Incorrect OTP");
+    }
+}
 
 
 export {
-
     sendMail,
-    verifyotp
-
+    verifyotp,
+    sendMsg,
+    verifyMsg
 }

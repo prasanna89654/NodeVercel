@@ -21,7 +21,8 @@
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.5",
     "nodemon": "^3.0.1",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "textflow.js": "^0.1.4"
   },
   "devDependencies": {
     "prisma": "^5.1.1"

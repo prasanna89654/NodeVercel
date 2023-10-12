@@ -6,7 +6,8 @@ import {
   getPublisherReport,
   searchBook,
   getPublisherAccount,
-  getAdminAccount
+  getAdminAccount,
+  getDashboardData
 } from "../controllers/report_controller.js";
 import { protect } from "../middleware/authorization.js";
 
@@ -23,6 +24,8 @@ router.get("/getAdminReport", protect, getAdminReport);
 router.get("/getPublisherAccount", protect, getPublisherAccount);
 
 router.get("/getAdminAccount", protect, getAdminAccount);
+
+router.get("/getDashboardData",protect, getDashboardData);
 
 router.get("/search",  searchBook);
 
