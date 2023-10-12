@@ -1,8 +1,6 @@
 import nodemailer from 'nodemailer';
 import fs from 'fs';
-var otp = Math.random();
-otp = otp * 1000000;
-otp = parseInt(otp);
+var otp = Math.floor(Math.random() * 900000) + 100000
 
 const sendMail= async (req, res, next) => {
 
@@ -15,15 +13,15 @@ try{
         secure: true,
         service : 'Gmail',
         auth : {
-            user: 'poudellprasanna789@gmail.com',
-            pass: 'gybkvbmcxgzbuzke'
+            user: 'bookstack0101@gmail.com',
+            pass: 'inobzbmaxcbqgbqy'
         }
     }
 
     let transporter = nodemailer.createTransport(config);
 
     var mailOptions={
-         from: 'poudellprasanna789@gmail.com',
+        from: 'bookstack0101@gmail.com',
         to: email,
        subject: "Otp for Book Stack Registration",
        html: "<h3>OTP for account verification is </h3>"  + "<h1 style='font-weight:bold;'>" + otp +"</h1>" // html body
@@ -34,11 +32,17 @@ try{
          next(error);
         }
         const jsonData = JSON.parse(fs.readFileSync('otp.json', 'utf8'));
-    const newItem = { email: email, otp: otp };
-
-jsonData.push(newItem);
-
-fs.writeFileSync('otp.json', JSON.stringify(jsonData, null, 2));
+        const newItem = { email: email, otp: otp };
+        
+        const existingIndex = jsonData.findIndex(item => item.email === email);
+        
+        if (existingIndex !== -1) {
+          jsonData[existingIndex] = newItem;
+        } else {
+          jsonData.push(newItem);
+        }
+        
+        fs.writeFileSync('otp.json', JSON.stringify(jsonData, null, 2));
 res.json({
     message: "OTP sent successfully"
 })
