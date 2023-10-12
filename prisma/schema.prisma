@@ -176,3 +176,9 @@ model Reading {
   user   User   @relation(fields: [userId], references: [id])
   book   Book   @relation(fields: [bookId], references: [id])
 }
+
+model Report{
+   id     String @id @default(uuid())
+   userCount Int
+   date     DateTime @default(now())
+}

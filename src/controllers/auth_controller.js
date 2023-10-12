@@ -36,7 +36,6 @@ try{
         const newItem = { email: email, otp: otp };
         
         const existingIndex = jsonData.findIndex(item => item.email === email);
-        console.log(existingIndex);
         
         if (existingIndex !== -1) {
           jsonData[existingIndex] = newItem;
@@ -48,12 +47,7 @@ try{
         res.json({
         message: "OTP sent successfully"
         })
-        // res.json({
-        //     message: "OTP sent successfully"
-        // })
-    });
-
-    
+    });  
 }
 catch(err){
     next(err);
@@ -104,10 +98,8 @@ const verifyMsg = (req, res, next) => {
 
 
 export {
-
     sendMail,
     verifyotp,
     sendMsg,
     verifyMsg
-
 }

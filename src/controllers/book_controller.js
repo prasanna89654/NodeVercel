@@ -2,8 +2,6 @@ import { PrismaClient } from "@prisma/client";
 import Cloudinary from "cloudinary";
 import datauri from "datauri/parser.js";
 import path from "path";
-
-// import cloudinary from "../middleware/errorMiddleware.js";
 import Genre from "../utils/constants.js";
 const prisma = new PrismaClient();
 const duri = new datauri();
@@ -76,6 +74,28 @@ const createBook = async (req, res, next) => {
 
 const getAllBooks = async (req, res, next) => {
   try {
+    const currentDate = new Date();
+    const existingRecord = await prisma.report.findFirst({
+      where: {
+        date: {
+          gte: new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()),
+          lt: new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 1),
+        },
+      },
+    });
+    if (existingRecord) {
+      await prisma.report.update({
+        where: { id: existingRecord.id },
+        data: { userCount: existingRecord.userCount + 1 },
+      });
+    } else {
+      await prisma.report.create({
+        data: {
+          userCount: 1,
+        },
+      });
+    }
+
     const allBooks = await prisma.book.findMany({
       select: {
         id: true,
@@ -84,6 +104,9 @@ const getAllBooks = async (req, res, next) => {
         image: true,
       },
     });
+
+
+    
 
     res.json(allBooks);
   } catch (err) {

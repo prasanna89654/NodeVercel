@@ -2,7 +2,6 @@ import { PrismaClient } from "@prisma/client";
 import generateToken from "../utils/generateToken.js";
 const prisma = new PrismaClient();
 import Cloudinary from "cloudinary";
-
 import datauri from "datauri/parser.js";
 import path from "path";
 
