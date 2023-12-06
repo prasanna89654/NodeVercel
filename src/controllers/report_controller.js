@@ -7,7 +7,6 @@ const getPublisherAccount = async (req, res, next) => {
       where: {
         publisherId: req.user.id,
       },
-      
     });
     res.json(account);
   }

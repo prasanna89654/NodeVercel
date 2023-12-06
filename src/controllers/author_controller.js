@@ -4,6 +4,7 @@ const prisma = new PrismaClient();
 const createAuthor = async (req, res, next) => {
   const { name, dob, bio, address, description } = req.body;
 
+
   try {
     const author = await prisma.author.create({
       data: {
