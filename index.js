@@ -33,3 +33,4 @@ app.use(errorHandler.errorHandler);
 app.listen(port, (err, res) => {
   console.log("[INFO] Server Running on port:", port);
 });
+ export default app;
