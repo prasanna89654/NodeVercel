@@ -25,7 +25,7 @@ app.use("/report", reportRoutes);
 app.use("/auth", authRoutes);
 
 app.get("/", (req, res) => {
-  res.send("Express JS on Vercel");
+  res.send("Express JS working");
 });
 
 const port = process.env.PORT || 8080;
